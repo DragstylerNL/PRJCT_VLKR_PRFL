@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d435475f2d70d4e9b639745b7dab60, type: 3}
+  m_Name: GenricPet
+  m_EditorClassIdentifier: 
+  _cName: Mr. Basic
+  _cHealth: 100
+  _cActionPoints: 10
+  _cAttackDamage: 10
+  _cAttackApNeed: 5
+  _cModelPrefab: {fileID: 7733564144947068570, guid: 7b93274ba009c7b498d5de4edc88409e,
+    type: 3}
