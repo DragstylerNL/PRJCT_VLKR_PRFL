@@ -11,7 +11,9 @@ public class CharacterHolder : ScriptableObject
     public int _cActionPoints;
     public int _cAttackDamage;
     public int _cAttackApNeed;
+    public int _cDefenceApNeed;
     
     public GameObject _cModelPrefab;
+    public GameObject _cShieldModel;
 
 }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerScript : MonoBehaviour
+public class TeamScript : MonoBehaviour
 {
     public GameObject basePrefab;
 
     private int _playerNumber;
     private CharacterHolder[] _Characters = new CharacterHolder[4];
+    private PlayingCharacter[] _ActiveCharacters = new PlayingCharacter[4];
 
     private int _pHealthPoints;
     private Slider _pHpSlider;
@@ -33,6 +34,7 @@ public class PlayerScript : MonoBehaviour
             GameObject currentEdit = Instantiate(basePrefab);
             currentEdit.transform.parent = GameObject.Find("Player" + _playerNumber).transform;
             currentEdit.GetComponent<PlayingCharacter>().SummonToTheField(_Characters[i], DesiredPos(i), i, _playerNumber);
+            _ActiveCharacters[i] = currentEdit.GetComponent<PlayingCharacter>();
         }
     }
 
@@ -54,15 +56,20 @@ public class PlayerScript : MonoBehaviour
         return pos;
     }
 
-    public void TakeDamage(int damage)
+    public bool TakeDamage(int damage, int charachterUnderAttack)
     {
-        _pHealthPoints -= damage;
-        if(_pHealthPoints <= 0)
+        if (!_ActiveCharacters[charachterUnderAttack - 1]._isBlocking)
         {
-            _pHealthPoints = 0;
-            GameObject.FindGameObjectWithTag("InputManager").GetComponent<InputManager>().SetAllowInput(false);
+            _pHealthPoints -= damage;
+            if(_pHealthPoints <= 0)
+            {
+                _pHealthPoints = 0;
+                GameObject.FindGameObjectWithTag("InputManager").GetComponent<InputManager>().SetAllowInput(false);
+            }
+            UpdateHealthBar();
+            return false;
         }
-        UpdateHealthBar();
+        return true;
     }
 
     private void UpdateHealthBar()

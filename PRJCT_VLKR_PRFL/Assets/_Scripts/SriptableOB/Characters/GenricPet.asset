@@ -16,6 +16,9 @@ MonoBehaviour:
   _cHealth: 100
   _cActionPoints: 10
   _cAttackDamage: 10
-  _cAttackApNeed: 5
+  _cAttackApNeed: 6
+  _cDefenceApNeed: 4
   _cModelPrefab: {fileID: 7733564144947068570, guid: 7b93274ba009c7b498d5de4edc88409e,
+    type: 3}
+  _cShieldModel: {fileID: 6162644206455054311, guid: f5f396b7def73be48b9671170ccd7e8b,
     type: 3}

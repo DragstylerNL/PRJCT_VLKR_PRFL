@@ -5,21 +5,25 @@ using UnityEngine.UI;
 
 public class PlayingCharacter : MonoBehaviour
 {
+    // needed references
     private CharacterHolder _character;
     private InputManager _InputManager;
     private Enum_Buttons.Buttons _button;
+    private TeamScript enemyScript;
 
+    // player world stuff
     private Vector3 _desiredPosition;
     private GameObject _graphics;
     private int _characterInOrder;
     private int _playerNumber;
 
+    // player ActionPoints 
     private int _maxActionPoints, _currentActionPoints;
     private Slider _slider;
 
-    private PlayerScript enemyScript;
-
+    // general player stats
     private bool _canDoSomething = true;
+    public bool _isBlocking { get; private set; } = false;
 
     /// <summary>
     /// intantiating of this player
@@ -66,14 +70,24 @@ public class PlayingCharacter : MonoBehaviour
     {
         _InputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
         int temp = _playerNumber==1? 2 : 1 ;
-        enemyScript = GameObject.FindGameObjectWithTag("Player" + temp).GetComponent<PlayerScript>();
+        enemyScript = GameObject.FindGameObjectWithTag("Player" + temp).GetComponent<TeamScript>();
     }
 
     private void Update()
     {
         if (_canDoSomething)
         {
-            if (_InputManager.GetButton(_button, Enum_Buttons.ButtonState.GoingUp, _playerNumber))
+            if (_InputManager.GetButton(_button, Enum_Buttons.ButtonState.GoingUp, _playerNumber) && _InputManager.GetTrigger(Enum_Buttons.Axis.Right_Trigger, _playerNumber) >= 0.1f)
+            {
+                if (_currentActionPoints >= _character._cDefenceApNeed)
+                {
+                    _currentActionPoints = 0;
+                    _slider.value = 0;
+                    _canDoSomething = false;
+                    StartCoroutine(DefenceWait());
+                }
+            }
+            else if (_InputManager.GetButton(_button, Enum_Buttons.ButtonState.GoingUp, _playerNumber))
             {
                 if (_currentActionPoints >= _character._cAttackApNeed)
                 {
@@ -90,11 +104,38 @@ public class PlayingCharacter : MonoBehaviour
 
     IEnumerator AttackWait()
     {
-        enemyScript.TakeDamage(_character._cAttackDamage);
+        // position logic
         int temp = _playerNumber == 1 ? 1 : -1;
+        // attack patterns
+        bool isBlocked = enemyScript.TakeDamage(_character._cAttackDamage, _characterInOrder);
+        if (isBlocked) { temp *= -1; }
         transform.position += new Vector3(1.5f * temp, 0, 0);
+
+        // yield return
         yield return new WaitForSeconds(1f);
+
+        // reset
         transform.position -= new Vector3(1.5f * temp, 0, 0);
+        _canDoSomething = true;
+    }
+
+    IEnumerator DefenceWait()
+    {
+        // position logic
+        int temp = _playerNumber == 1 ? 1 : -1;
+        // shield prefab
+        GameObject shield = Instantiate(_character._cShieldModel);
+        shield.transform.parent = null;
+        shield.transform.position = transform.position + new Vector3(0.5f * temp, 0, 0);
+        // set block state
+        _isBlocking = true;
+
+        // yield return
+        yield return new WaitForSeconds(2f);
+
+        // reset
+        Destroy(shield);
+        _isBlocking = false;
         _canDoSomething = true;
     }
 

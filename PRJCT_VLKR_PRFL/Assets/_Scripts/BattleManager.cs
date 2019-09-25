@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+
+    private bool _ActiveAttackSystem { get; } = false;
     
     void Start()
     {
@@ -14,5 +16,13 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    /// <summary>
+    /// for instantiating and continuing the active BattleSystem
+    /// </summary>
+    public void ActionTaken()
+    {
+
     }
 }

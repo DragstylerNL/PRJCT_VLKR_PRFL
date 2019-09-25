@@ -20,13 +20,10 @@ public class InputManager : MonoBehaviour
             {
                 case Enum_Buttons.ButtonState.GoingDown:
                     return Input.GetButtonDown(button.ToString() + player);
-                    break;
                 case Enum_Buttons.ButtonState.IsDown:
                     return Input.GetButton(button.ToString() + player);
-                    break;
                 case Enum_Buttons.ButtonState.GoingUp:
                     return Input.GetButtonUp(button.ToString() + player);
-                    break;
             }
         }
         return false;
