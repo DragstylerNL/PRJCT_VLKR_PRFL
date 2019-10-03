@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ using InControl;
 public class MultiplayerControllerFinder : MonoBehaviour
 {
     public Text controllerText;
+    public GameObject[] _player;
+    public Text[] playerText;
 
     List<InputDevice> controllers = new List<InputDevice>();
     bool[] playersConnected = new bool[2];
@@ -30,7 +33,7 @@ public class MultiplayerControllerFinder : MonoBehaviour
         if (playersConnected[0] && playersConnected[1])
         {
             print(actuallPlayers[0].Name + " " + actuallPlayers[1].Name);
-            SceneManager.LoadScene("MultiplayerBattleZone");
+            StartCoroutine(StartLoading());
         }
     }
 
@@ -44,25 +47,29 @@ public class MultiplayerControllerFinder : MonoBehaviour
                 if (player == 1) { if (actuallPlayers[0] == InputManager.Devices[i]) { return; } }
                 actuallPlayers.Add(InputManager.Devices[i]);
                 playersConnected[player] = true;
+                _player[player].GetComponent<Animator>().SetBool("True", true);
                 //print("added: " + controllers[i]);
                 ShowUI(2);
-                if (playersConnected[0] && playersConnected[1]) { RemoveUI(); SaveControllers(); }
+                if (playersConnected[0] && playersConnected[1]) { SaveControllers(); ShowUI(3); }
             }
         }
     }
 
     void ShowUI(int cntrlNmbr)
     {
-        controllerText.text = "Press any button on controller " + cntrlNmbr;
-    }
-
-    void RemoveUI()
-    {
-        controllerText.text = "&%#^Loading&^#%";
+        if (cntrlNmbr == 1) { playerText[0].text = "Press any button on controller 1"; }
+        else if (cntrlNmbr == 2) { playerText[1].text = "Press any button on controller 2"; playerText[0].text = "CONNECTED"; }
+        else if (cntrlNmbr == 3) { playerText[1].text = "CONNECTED"; }
     }
 
     void SaveControllers()
     {
         GameObject.Find("MultiplayerControllerHolder").GetComponent<MultiplayerControllerHolder>()._players = actuallPlayers;
+    }
+
+    IEnumerator StartLoading()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("MultiplayerBattleZone");
     }
 }
