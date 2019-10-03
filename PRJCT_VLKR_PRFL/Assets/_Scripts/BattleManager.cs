@@ -9,7 +9,7 @@ public class BattleManager : MonoBehaviour
     
     void Start()
     {
-        GameObject.FindGameObjectWithTag("InputManager").GetComponent<InputManager>().SetAllowInput(true);
+        GameObject.FindGameObjectWithTag("InputManager").GetComponent<Input_Manager>().SetAllowInput(true);
     }
 
     // Update is called once per frame

@@ -8,11 +8,21 @@ public class TeamScript : MonoBehaviour
     public GameObject basePrefab;
 
     private int _playerNumber;
-    private CharacterHolder[] _Characters = new CharacterHolder[4];
-    private PlayingCharacter[] _ActiveCharacters = new PlayingCharacter[4];
+    public CharacterHolder[] _Characters;
 
     private int _pHealthPoints;
     private Slider _pHpSlider;
+
+    private Dictionary<int, PlayingCharacter> _playerList = new Dictionary<int, PlayingCharacter>();
+    PlayingCharacter[] _ActiveCharacters = new PlayingCharacter[4];
+
+    private bool _blocking = false;
+
+    public int plnmbr;
+    void Start()
+    {
+        SetPlayerStats(plnmbr, _Characters);
+    }
 
     public void SetPlayerStats(int playerNumber, CharacterHolder[] characters)
     {
@@ -33,18 +43,21 @@ public class TeamScript : MonoBehaviour
         {
             GameObject currentEdit = Instantiate(basePrefab);
             currentEdit.transform.parent = GameObject.Find("Player" + _playerNumber).transform;
-            currentEdit.GetComponent<PlayingCharacter>().SummonToTheField(_Characters[i], DesiredPos(i), i, _playerNumber);
             _ActiveCharacters[i] = currentEdit.GetComponent<PlayingCharacter>();
+            _ActiveCharacters[i].SummonToTheField(_Characters[i], DesiredPos(i), i, _playerNumber);
+
+            SetIntoDictionary(_ActiveCharacters[i], i);
         }
     }
 
     private Vector3 DesiredPos(int i)
     {
-        int j = 1; if(_playerNumber == 1) { j = -1; }
+        int j = 1; if (_playerNumber == 1) { j = -1; }
         Vector3 pos = new Vector3();
         switch (i)
         {
-            case 0: pos = new Vector3(2 * j, 1, 0);
+            case 0:
+                pos = new Vector3(2 * j, 1, 0);
                 break;
             case 1: pos = new Vector3(3 * j, 1, -1);
                 break;
@@ -56,15 +69,37 @@ public class TeamScript : MonoBehaviour
         return pos;
     }
 
+    void SetIntoDictionary( PlayingCharacter charachter, int actionToLink)
+    {
+        int j = 1; if (_playerNumber == 1) { j = -1; }
+        if(actionToLink == 0) {
+            if (j == -1) { _playerList.Add(2, charachter); }
+            else _playerList.Add(3, charachter);
+        }
+        else if(actionToLink == 1)
+        {
+            _playerList.Add(1, charachter);
+        }
+        else if (actionToLink == 2)
+        {
+            _playerList.Add(4, charachter);
+        }
+        if (actionToLink == 3)
+        {
+            if (j == -1) { _playerList.Add(3, charachter); }
+            else _playerList.Add(2, charachter);
+        }
+    }
+
     public bool TakeDamage(int damage, int charachterUnderAttack)
     {
         if (!_ActiveCharacters[charachterUnderAttack - 1]._isBlocking)
         {
             _pHealthPoints -= damage;
-            if(_pHealthPoints <= 0)
+            if (_pHealthPoints <= 0)
             {
                 _pHealthPoints = 0;
-                GameObject.FindGameObjectWithTag("InputManager").GetComponent<InputManager>().SetAllowInput(false);
+                GameObject.FindGameObjectWithTag("InputManager").GetComponent<Input_Manager>().SetAllowInput(false);
             }
             UpdateHealthBar();
             return false;
@@ -77,11 +112,21 @@ public class TeamScript : MonoBehaviour
         _pHpSlider.value = _pHealthPoints;
     }
 
-    public int plnmbr;
-    public CharacterHolder ch;
-    void Start()
+    public void ActionGotTriggered(int action)
     {
-        CharacterHolder[] holder = { ch, ch, ch, ch};
-        SetPlayerStats(plnmbr, holder);
+        _playerList.TryGetValue(action, out PlayingCharacter character);
+        if (!_blocking)
+        {
+            character.Attack();
+        }
+        else
+        {
+            character.Defend();
+        }
+    }
+
+    public void TriggerGotTriggered(bool triggerState)
+    {
+        _blocking = triggerState;
     }
 }

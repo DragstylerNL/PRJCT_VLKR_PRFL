@@ -7,7 +7,7 @@ public class PlayingCharacter : MonoBehaviour
 {
     // needed references
     private CharacterHolder _character;
-    private InputManager _InputManager;
+    private Input_Manager _InputManager;
     private Enum_Buttons.Buttons _button;
     private TeamScript enemyScript;
 
@@ -68,38 +68,35 @@ public class PlayingCharacter : MonoBehaviour
 
     private void Start()
     {
-        _InputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
+        _InputManager = GameObject.Find("InputManager").GetComponent<Input_Manager>();
         int temp = _playerNumber==1? 2 : 1 ;
         enemyScript = GameObject.FindGameObjectWithTag("Player" + temp).GetComponent<TeamScript>();
     }
 
-    private void Update()
+    void Update()
     {
-        if (_canDoSomething)
-        {
-            if (_InputManager.GetButton(_button, Enum_Buttons.ButtonState.GoingUp, _playerNumber) && _InputManager.GetTrigger(Enum_Buttons.Axis.Right_Trigger, _playerNumber) >= 0.1f)
-            {
-                if (_currentActionPoints >= _character._cDefenceApNeed)
-                {
-                    _currentActionPoints = 0;
-                    _slider.value = 0;
-                    _canDoSomething = false;
-                    StartCoroutine(DefenceWait());
-                }
-            }
-            else if (_InputManager.GetButton(_button, Enum_Buttons.ButtonState.GoingUp, _playerNumber))
-            {
-                if (_currentActionPoints >= _character._cAttackApNeed)
-                {
-                    _currentActionPoints -= _character._cAttackApNeed;
-                    _slider.value = _currentActionPoints;
-                    _canDoSomething = false;
-                    StartCoroutine(AttackWait());
-                }
-            }
-        }
-
         RegenerateEnergy();
+    }
+
+    public void Defend()
+    {
+        if (_canDoSomething && _currentActionPoints >= _character._cDefenceApNeed)
+        {
+            _currentActionPoints = 0;
+            _slider.value = 0;
+            _canDoSomething = false;
+            StartCoroutine(DefenceWait());
+        }
+    }
+    public void Attack()
+    {
+        if (_canDoSomething && _currentActionPoints >= _character._cAttackApNeed)
+        {
+            _currentActionPoints -= _character._cAttackApNeed;
+            _slider.value = _currentActionPoints;
+            _canDoSomething = false;
+            StartCoroutine(AttackWait());
+        }
     }
 
     IEnumerator AttackWait()
@@ -149,7 +146,7 @@ public class PlayingCharacter : MonoBehaviour
             {
                 _currentActionPoints += 1;
                 UpdateSlider();
-                secondTime = 0;
+                secondTime -= 1;
             }
         }
     }
