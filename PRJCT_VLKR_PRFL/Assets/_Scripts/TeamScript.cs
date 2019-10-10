@@ -41,7 +41,8 @@ public class TeamScript : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            GameObject currentEdit = Instantiate(basePrefab);
+            GameObject currentEdit = Instantiate(new GameObject());
+            currentEdit.AddComponent<PlayingCharacter>();
             currentEdit.transform.parent = GameObject.Find("Player" + _playerNumber).transform;
             _ActiveCharacters[i] = currentEdit.GetComponent<PlayingCharacter>();
             _ActiveCharacters[i].SummonToTheField(_Characters[i], DesiredPos(i), i, _playerNumber);

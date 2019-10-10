@@ -22,7 +22,12 @@ public class InputHandler : MonoBehaviour
     {
         for (int i = 0; i < action.Length; i++)
         {
-            if (action[i]) { teams[player].ActionGotTriggered(i + 1); }
+            if (action[i])
+            {
+                teams[player].ActionGotTriggered(i + 1);
+                GameObject.Find("BattleManager").GetComponent<BattleManager>().ActionTaken(i+1);
+            }
+            
         }
     }
 
