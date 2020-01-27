@@ -10,13 +10,16 @@ public class BattleManager : MonoBehaviour
     
     void Start()
     {
+        // at the start of the battle the AllowInput should be changed to true
         GameObject.FindGameObjectWithTag("InputManager").GetComponent<Input_Manager>().SetAllowInput(true);
+        // get the ActionSceneSwitcher and add the refrence to this script
         _actionSceneSwitch = GetComponent<ActionSceneSwitch>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
+        // if "runing" => add time.deltaTime to the timer
         if (AT) { TimeRunning += Time.deltaTime; }
         if(TimeRunning > WaitTimer) { StopActionsTime(); }
     }
@@ -37,6 +40,8 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+
+    // Custom Ienumerator for keeping in check wheter or not the ActionScene should show
     bool AT = false;
     float WaitTimer = 1f;
     float TimeRunning = 0f;

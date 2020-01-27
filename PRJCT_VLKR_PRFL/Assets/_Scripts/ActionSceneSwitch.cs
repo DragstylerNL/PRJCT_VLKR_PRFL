@@ -17,6 +17,10 @@ public class ActionSceneSwitch : MonoBehaviour
     public Transform[] player1 = new Transform[4];
     public Transform[] player2 = new Transform[4];
     public Vector3[] normalPos = new Vector3[4], attackingPos = new Vector3[4];
+    [Header("ActionPositions")]
+    public GameObject[] attackingPositions = new GameObject[2];
+    public Dictionary<int, PlayingCharacter> _playerList = new Dictionary<int, PlayingCharacter>();
+    public GameObject[,] actionSprites = new GameObject[2, 2];
 
     public void StartAppearing(){
         _startToAppear = true;
@@ -30,6 +34,11 @@ public class ActionSceneSwitch : MonoBehaviour
     {
         _moveButtons = true;
         _attackingButton = button;
+        StartCoroutine(Attack());
+    }
+    IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(1f);
     }
 
     void Start()
@@ -87,7 +96,7 @@ public class ActionSceneSwitch : MonoBehaviour
                     break;
             }
         }
-        if (!_moveButtons)
+        else if (!_moveButtons)
         {
             MoveToNormal();
         }

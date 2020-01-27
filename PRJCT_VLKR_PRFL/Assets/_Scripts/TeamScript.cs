@@ -14,7 +14,7 @@ public class TeamScript : MonoBehaviour
     private Slider _pHpSlider;
 
     private Dictionary<int, PlayingCharacter> _playerList = new Dictionary<int, PlayingCharacter>();
-    PlayingCharacter[] _ActiveCharacters = new PlayingCharacter[4];
+    private PlayingCharacter[] _ActiveCharacters = new PlayingCharacter[4];
 
     private bool _blocking = false;
 
@@ -48,6 +48,8 @@ public class TeamScript : MonoBehaviour
             _ActiveCharacters[i].SummonToTheField(_Characters[i], DesiredPos(i), i, _playerNumber);
 
             SetIntoDictionary(_ActiveCharacters[i], i);
+
+
         }
     }
 
@@ -90,6 +92,7 @@ public class TeamScript : MonoBehaviour
             if (j == -1) { _playerList.Add(3, charachter); }
             else _playerList.Add(2, charachter);
         }
+        GameObject.Find("BattleManager").GetComponent<ActionSceneSwitch>()._playerList = _playerList;
     }
 
     public bool TakeDamage(int damage, int charachterUnderAttack)
