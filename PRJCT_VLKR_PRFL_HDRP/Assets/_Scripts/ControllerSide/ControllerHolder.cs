@@ -4,7 +4,7 @@ using UnityEngine;
 using InControl;
 
 
-public class MultiplayerControllerHolder : MonoBehaviour
+public class ControllerHolder : MonoBehaviour
 {
 
     public List<InputDevice> _players = new List<InputDevice>();

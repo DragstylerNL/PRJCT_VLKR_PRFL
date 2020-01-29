@@ -20,7 +20,7 @@ public class MultiplayerControllerFinder : MonoBehaviour
     {
         InputManager.OnDeviceAttached += inputDevice => Debug.Log("Attached: " + inputDevice.Name);
         InputManager.OnDeviceDetached += inputDevice => Debug.Log("Detached: " + inputDevice.Name);
-        InputManager.OnActiveDeviceChanged += inputDevice => Debug.Log("Switched: " + inputDevice.Name); ;
+        InputManager.OnActiveDeviceChanged += inputDevice => Debug.Log("Switched: " + inputDevice.Name);
         ShowUI(1);
     }
 
@@ -64,12 +64,12 @@ public class MultiplayerControllerFinder : MonoBehaviour
 
     void SaveControllers()
     {
-        GameObject.Find("MultiplayerControllerHolder").GetComponent<MultiplayerControllerHolder>()._players = actuallPlayers;
+        GameObject.Find("ControllerHolder").GetComponent<ControllerHolder>()._players = actuallPlayers;
     }
 
     IEnumerator StartLoading()
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("MultiplayerBattleZone");
+        SceneManager.LoadScene("MP_BattleScene");
     }
 }
