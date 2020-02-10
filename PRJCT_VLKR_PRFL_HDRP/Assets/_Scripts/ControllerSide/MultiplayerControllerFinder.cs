@@ -13,6 +13,7 @@ public class MultiplayerControllerFinder : MonoBehaviour
 
     List<InputDevice> controllers = new List<InputDevice>();
     bool[] playersConnected = new bool[2];
+    bool moveDown = false;
 
     List<InputDevice> actuallPlayers = new List<InputDevice>();
 
@@ -24,16 +25,41 @@ public class MultiplayerControllerFinder : MonoBehaviour
         ShowUI(1);
     }
 
+    bool updateOrNot = true;
     // Update is called once per frame
     void Update()
     {
         if (!playersConnected[0]) { listenToControllers(0); }
         else if (!playersConnected[1]) { listenToControllers(1); }
 
-        if (playersConnected[0] && playersConnected[1])
+
+        if (playersConnected[0] && playersConnected[1] && updateOrNot)
         {
+            updateOrNot = false;
             print(actuallPlayers[0].Name + " " + actuallPlayers[1].Name);
-            StartCoroutine(StartLoading());
+            StartCoroutine(WaitTimer());
+        }
+
+        if (moveDown)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                _player[i].transform.position =
+                    new Vector3(
+                        _player[i].transform.position.x,
+                        Mathf.Lerp(_player[i].transform.position.y, -5, 0.05f),
+                        _player[i].transform.position.z);
+                playerText[i].transform.position =
+                    new Vector3(
+                        playerText[i].transform.position.x,
+                        Mathf.Lerp(playerText[i].transform.position.y, -10, 0.05f),
+                        playerText[i].transform.position.z);
+            }
+            if(_player[1].transform.position.y == -10)
+            {
+                moveDown = false;
+                GameObject.Find("CharacterSelect").GetComponent<MP_CharacterSelect>().StartSelection();
+            }
         }
     }
 
@@ -67,9 +93,9 @@ public class MultiplayerControllerFinder : MonoBehaviour
         GameObject.Find("ControllerHolder").GetComponent<ControllerHolder>()._players = actuallPlayers;
     }
 
-    IEnumerator StartLoading()
+    IEnumerator WaitTimer()
     {
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("MP_BattleScene");
+        yield return new WaitForSeconds(2);
+        moveDown = true;
     }
 }
