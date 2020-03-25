@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41d435475f2d70d4e9b639745b7dab60, type: 3}
-  m_Name: GenricPet
+  m_Name: GenricPet_CHOBJ
   m_EditorClassIdentifier: 
   _cName: Mr. Basic
   _cHealth: 100
@@ -18,6 +18,6 @@ MonoBehaviour:
   _cAttackDamage: 10
   _cAttackApNeed: 3
   _cDefenceApNeed: 3
-  _cModelPrefab: {fileID: 1162529831554454183, guid: 877767350c1d8d94084be32141e26b72,
+  _cModelPrefab: {fileID: 8210854134812022938, guid: 4d4ad1bae06b7a64b95062c1ff9b0db9,
     type: 3}
-  _cProfilePic: {fileID: 0}
+  _cProfilePic: {fileID: 21300000, guid: fd1e3612437f1bc499afb576815ff402, type: 3}

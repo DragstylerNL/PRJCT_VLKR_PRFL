@@ -5,9 +5,7 @@ public class SceneSwitcher : MonoBehaviour
 {
     public void LoadScene(string sceneToBeLoaded)
     {
-        print("ok");
+        print("Loading: " + sceneToBeLoaded);
         SceneManager.LoadScene(sceneToBeLoaded);
     }
-
-
 }

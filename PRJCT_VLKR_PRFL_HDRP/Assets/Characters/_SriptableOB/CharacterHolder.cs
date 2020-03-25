@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "Character", menuName = "Characters/New Character", order = 1)]
+[CreateAssetMenu(fileName = "Character", menuName = "Characters/New Character", order = 2)]
 public class CharacterHolder : ScriptableObject
 {
     [Header("Basic unit stats")]

@@ -1,101 +1,109 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using InControl;
 
 public class MultiplayerControllerFinder : MonoBehaviour
 {
-    public Text controllerText;
-    public GameObject[] _player;
-    public Text[] playerText;
+    // ============================================================================================== "public" variables
+    [SerializeField] private GameObject[] player;
+    [SerializeField] private Text[] playerText;
+    [SerializeField] private MP_CharacterSelect characterSelect;
 
-    List<InputDevice> controllers = new List<InputDevice>();
-    bool[] playersConnected = new bool[2];
-    bool moveDown = false;
+    // =============================================================================================== private variables
+    private List<InputDevice> _actuallPlayers = new List<InputDevice>();
+    private bool[] _playersConnected = new bool[2];
+    private bool _updateOrNot = true;
+    private bool _moveDown;
 
-    List<InputDevice> actuallPlayers = new List<InputDevice>();
-
-    void Start()
+    // =========================================================================================================== Awake
+    private void Awake()
     {
         InputManager.OnDeviceAttached += inputDevice => Debug.Log("Attached: " + inputDevice.Name);
         InputManager.OnDeviceDetached += inputDevice => Debug.Log("Detached: " + inputDevice.Name);
         InputManager.OnActiveDeviceChanged += inputDevice => Debug.Log("Switched: " + inputDevice.Name);
-        ShowUI(1);
     }
 
-    bool updateOrNot = true;
-    // Update is called once per frame
+    // =========================================================================================================== Start
+    private void Start()
+    {
+        ShowUi(1);
+    }
+
+    // ========================================================================================================== Update
     void Update()
     {
-        if (!playersConnected[0]) { listenToControllers(0); }
-        else if (!playersConnected[1]) { listenToControllers(1); }
+        if (!_playersConnected[0]) { ListenToControllers(0); }
+        else if (!_playersConnected[1]) { ListenToControllers(1); }
 
 
-        if (playersConnected[0] && playersConnected[1] && updateOrNot)
+        if (_playersConnected[0] && _playersConnected[1] && _updateOrNot)
         {
-            updateOrNot = false;
-            print(actuallPlayers[0].Name + " " + actuallPlayers[1].Name);
+            _updateOrNot = false;
+            print(_actuallPlayers[0].Name + " " + _actuallPlayers[1].Name);
             StartCoroutine(WaitTimer());
         }
 
-        if (moveDown)
+        if (_moveDown)
         {
             for (int i = 0; i < 2; i++)
             {
-                _player[i].transform.position =
+                player[i].transform.position =
                     new Vector3(
-                        _player[i].transform.position.x,
-                        Mathf.Lerp(_player[i].transform.position.y, -5, 0.05f),
-                        _player[i].transform.position.z);
+                        player[i].transform.position.x,
+                        Mathf.Lerp(player[i].transform.position.y, -5.5f, 0.05f),
+                        player[i].transform.position.z);
                 playerText[i].transform.position =
                     new Vector3(
                         playerText[i].transform.position.x,
                         Mathf.Lerp(playerText[i].transform.position.y, -10, 0.05f),
                         playerText[i].transform.position.z);
             }
-            if(_player[1].transform.position.y == -10)
+            if (player[1].transform.position.y <= -5.5f+0.01f)
             {
-                moveDown = false;
-                GameObject.Find("CharacterSelect").GetComponent<MP_CharacterSelect>().StartSelection();
+                _moveDown = false;
+                characterSelect.StartSelection();
             }
         }
     }
 
-    void listenToControllers(int player)
+    // ================================================================================================ Find Controllers
+    void ListenToControllers(int player)
     {
 
         for (int i = 0; i < InputManager.Devices.Count; i++)
         {
             if (InputManager.Devices[i].AnyButtonWasReleased)
             {
-                if (player == 1) { if (actuallPlayers[0] == InputManager.Devices[i]) { return; } }
-                actuallPlayers.Add(InputManager.Devices[i]);
-                playersConnected[player] = true;
-                _player[player].GetComponent<Animator>().SetBool("True", true);
-                //print("added: " + controllers[i]);
-                ShowUI(2);
-                if (playersConnected[0] && playersConnected[1]) { SaveControllers(); ShowUI(3); }
+                if (player == 1) { if (_actuallPlayers[0] == InputManager.Devices[i]) { return; } }
+                _actuallPlayers.Add(InputManager.Devices[i]);
+                _playersConnected[player] = true;
+                this.player[player].GetComponent<Animator>().SetBool("True", true);
+                ShowUi(2);
+                if (_playersConnected[0] && _playersConnected[1]) { SaveControllers(); ShowUi(3); }
             }
         }
     }
 
-    void ShowUI(int cntrlNmbr)
+    // ======================================================================================================= UI update
+    void ShowUi(int cntrlNmbr)
     {
         if (cntrlNmbr == 1) { playerText[0].text = "Press any button on controller 1"; }
         else if (cntrlNmbr == 2) { playerText[1].text = "Press any button on controller 2"; playerText[0].text = "CONNECTED"; }
         else if (cntrlNmbr == 3) { playerText[1].text = "CONNECTED"; }
     }
 
+    // ================================================================================================ save controllers
     void SaveControllers()
     {
-        GameObject.Find("ControllerHolder").GetComponent<ControllerHolder>()._players = actuallPlayers;
+        GameObject.Find("@ControllerHolder").GetComponent<ControllerHolder>()._players = _actuallPlayers;
     }
 
+    // =========================================================================================================== Timer
     IEnumerator WaitTimer()
     {
-        yield return new WaitForSeconds(2);
-        moveDown = true;
+        yield return new WaitForSeconds(0.5f);
+        _moveDown = true;
     }
 }
