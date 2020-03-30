@@ -21,6 +21,9 @@
           <e p="Input" t="Include">
             <e p="Input_Manager.cs" t="Include" />
           </e>
+          <e p="LifeHacks" t="Include">
+            <e p="GameObjectHolder.cs" t="Include" />
+          </e>
           <e p="Multiplayer" t="Include">
             <e p="MP_CharacterSelect.cs" t="Include" />
           </e>
