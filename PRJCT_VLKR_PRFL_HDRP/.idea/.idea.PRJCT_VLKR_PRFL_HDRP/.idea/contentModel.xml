@@ -26,6 +26,7 @@
           </e>
           <e p="Multiplayer" t="Include">
             <e p="MP_CharacterSelect.cs" t="Include" />
+            <e p="MultiplayerCharacterHolder.cs" t="Include" />
           </e>
           <e p="SceneManagement" t="Include">
             <e p="SceneSwitcher.cs" t="Include" />

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using InControl;
 
 public class MP_CharacterSelect : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class MP_CharacterSelect : MonoBehaviour
     
     [SerializeField] private CharacterCollection collection;
     [SerializeField] private ControllerHolder controllerHolder;
+    [SerializeField] private MultiplayerCharacterHolder mpCharacterHolder;
     
     // =============================================================================================== private variables
     private float _selectableSpacing = 14;
@@ -112,6 +112,6 @@ public class MP_CharacterSelect : MonoBehaviour
     // ======================================================================================================= On Select
     private void Select(int playerNumber)
     {
-        
+        mpCharacterHolder.AddCharacter(playerNumber, _playerAmountSelected[playerNumber], collection.characters[_playerIndexSelected[playerNumber]]);
     }
 }
