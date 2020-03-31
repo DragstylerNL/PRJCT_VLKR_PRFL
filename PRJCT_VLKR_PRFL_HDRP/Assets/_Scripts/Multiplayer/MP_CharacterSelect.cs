@@ -8,6 +8,7 @@ public class MP_CharacterSelect : MonoBehaviour
     [SerializeField] private Transform selectorScreen;
     [SerializeField] private GameObject selectables;
     [SerializeField] private GameObject selectablePrefab;
+    [SerializeField] private GameObjectHolder[] playerSelected;
     
     [SerializeField] private CharacterCollection collection;
     [SerializeField] private ControllerHolder controllerHolder;
@@ -19,7 +20,7 @@ public class MP_CharacterSelect : MonoBehaviour
 
     private Transform[] _playerSelectorPositions = new Transform[2];
     private int[] _playerIndexSelected = new int[2];
-    private int[] _playerAmountSelected = new int[4];
+    private int[] _playerAmountSelected = new int[2];
 
     private bool _update;
     private bool _checkInput;
@@ -81,13 +82,15 @@ public class MP_CharacterSelect : MonoBehaviour
         {
             for (int i = 0; i < 2; i++)
             {
-                if (_playerAmountSelected[i] != 4) continue;
-                if (controllerHolder._players[i].DPadLeft.WasPressed) 
-                    MoveSelected(false, i);
-                if (controllerHolder._players[i].DPadRight.WasPressed) 
-                    MoveSelected(true, i);
-                if (controllerHolder._players[i].Action1.WasPressed) 
-                    Select(i);
+                if (_playerAmountSelected[i] != 4)
+                {
+                    if (controllerHolder._players[i].DPadLeft.WasPressed) 
+                        MoveSelected(false, i);
+                    if (controllerHolder._players[i].DPadRight.WasPressed) 
+                        MoveSelected(true, i);
+                    if (controllerHolder._players[i].Action1.WasPressed) 
+                        Select(i);
+                }
             }
         }
     }
@@ -113,5 +116,12 @@ public class MP_CharacterSelect : MonoBehaviour
     private void Select(int playerNumber)
     {
         mpCharacterHolder.AddCharacter(playerNumber, _playerAmountSelected[playerNumber], collection.characters[_playerIndexSelected[playerNumber]]);
+        playerSelected[playerNumber].objects[_playerAmountSelected[playerNumber]].GetComponent<Image>().sprite =
+            collection.characters[_playerIndexSelected[playerNumber]]._cProfilePic;
+        _playerAmountSelected[playerNumber]++;
+        if (_playerAmountSelected[0]==4 && _playerAmountSelected[1]==4)
+        {
+            GetComponent<SceneSwitcher>().LoadScene("MP_BattleScene");
+        }
     }
 }

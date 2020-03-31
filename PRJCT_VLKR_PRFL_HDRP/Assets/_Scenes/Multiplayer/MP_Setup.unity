@@ -241,7 +241,6 @@ GameObject:
   m_Component:
   - component: {fileID: 44646883}
   - component: {fileID: 44646882}
-  - component: {fileID: 44646884}
   m_Layer: 0
   m_Name: InputFinder
   m_TagString: Untagged
@@ -282,18 +281,6 @@ Transform:
   m_Father: {fileID: 1117062055}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &44646884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 44646881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d7a9b730d80feb4d9b621f2a1b3cc7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &181779333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,6 +1288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1319153401}
   - component: {fileID: 1319153402}
+  - component: {fileID: 1319153403}
   m_Layer: 0
   m_Name: CharacterSelect
   m_TagString: Untagged
@@ -1338,8 +1326,24 @@ MonoBehaviour:
   selectables: {fileID: 262461259}
   selectablePrefab: {fileID: 2557307482446688680, guid: f07890db86a6f824d9561f5cab17a5ad,
     type: 3}
+  playerSelected:
+  - {fileID: 1082309867}
+  - {fileID: 1813222480}
   collection: {fileID: 11400000, guid: 3f1b699bc5e77d24687742b442e8c50b, type: 2}
   controllerHolder: {fileID: 970041910}
+  mpCharacterHolder: {fileID: 224674157}
+--- !u!114 &1319153403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319153400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d7a9b730d80feb4d9b621f2a1b3cc7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1338689776
 GameObject:
   m_ObjectHideFlags: 0
