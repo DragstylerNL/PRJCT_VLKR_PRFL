@@ -18,6 +18,12 @@
             <e p="ControllerHolder.cs" t="Include" />
             <e p="MultiplayerControllerFinder.cs" t="Include" />
           </e>
+          <e p="Enums" t="Include">
+            <e p="ControllerEnums.cs" t="Include" />
+          </e>
+          <e p="Input" t="Include">
+            <e p="InputMagic.cs" t="Include" />
+          </e>
           <e p="LifeHacks" t="Include">
             <e p="GameObjectHolder.cs" t="Include" />
           </e>
