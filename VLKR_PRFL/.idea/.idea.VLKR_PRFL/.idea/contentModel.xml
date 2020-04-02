@@ -7,6 +7,9 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="_Scripts" t="Include">
+          <e p="_MainMenu" t="Include">
+            <e p="MenuManager.cs" t="Include" />
+          </e>
           <e p="BattleStuff" t="Include">
             <e p="BattleDataStorage.cs" t="Include" />
           </e>
@@ -26,6 +29,7 @@
           </e>
           <e p="LifeHacks" t="Include">
             <e p="GameObjectHolder.cs" t="Include" />
+            <e p="LerpTo.cs" t="Include" />
           </e>
           <e p="Multiplayer" t="Include">
             <e p="MP_CharacterSelect.cs" t="Include" />
