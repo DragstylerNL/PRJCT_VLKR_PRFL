@@ -42,10 +42,10 @@ public class InputMagic : MonoBehaviour
     // ================================================================================================ CheckActionInput
     private void CheckActionInput(InputDevice pl, int i)
     {
-        _ActionKeys(i,1,pl.Action1.State);
-        _ActionKeys(i,2,pl.Action2.State);
-        _ActionKeys(i,3,pl.Action3.State);
-        _ActionKeys(i,4,pl.Action4.State);
+        _ActionKeys(i,1,pl.Action1.WasPressed);
+        _ActionKeys(i,2,pl.Action2.WasPressed);
+        _ActionKeys(i,3,pl.Action3.WasPressed);
+        _ActionKeys(i,4,pl.Action4.WasPressed);
     }
 
     // ================================================================================================ CheckBackButtons

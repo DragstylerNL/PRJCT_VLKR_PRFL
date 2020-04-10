@@ -3,7 +3,7 @@
 public class MultiplayerCharacterHolder : MonoBehaviour
 {
     // =============================================================================================== Private variables
-    private CharacterHolder[,] _selectedCharacters = new CharacterHolder[2,4];
+    public CharacterHolder[,] _selectedCharacters = new CharacterHolder[2,4];
     
     // =========================================================================================================== Awake
     private void Awake()

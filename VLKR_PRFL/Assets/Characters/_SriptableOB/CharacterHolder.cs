@@ -10,6 +10,7 @@ public class CharacterHolder : ScriptableObject
     public int _cAttackDamage;
     public int _cAttackApNeed;
     public int _cDefenceApNeed;
+    public int _cApRegen;
     
     [Header("unit's object containing anim")]
     public GameObject _cModelPrefab;

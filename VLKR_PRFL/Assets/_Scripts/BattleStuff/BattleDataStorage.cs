@@ -12,6 +12,4 @@ public class BattleDataStorage : MonoBehaviour
             playerCharacters[i].Add(ch);
         }
     }
-    
-    
 }
