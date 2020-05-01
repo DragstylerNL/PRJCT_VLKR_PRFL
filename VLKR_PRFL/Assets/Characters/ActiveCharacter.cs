@@ -28,11 +28,12 @@ public class ActiveCharacter : MonoBehaviour
 
     
     
-    // =========================================================================================================== Start
+    // ================================================================================================================= Start
     private void Start()
     {
         _cActiveGameObject = this.gameObject;
         _basePos = transform.position;
+        // TODO call anim function and CheckHealthStateForIdle to set te starting state == === ==== ===== ====== =======
     }
 
     // ======================================================================================================= Set Stats
@@ -56,12 +57,9 @@ public class ActiveCharacter : MonoBehaviour
     // ========================================================================================================== Attack
     public void Attack(ActiveCharacter enemy)
     {
-        print("made it");
         if(_cState != CharacterState.Type.Idle &&
-           _cState != CharacterState.Type.IdleDamaged &&
-           _cState != CharacterState.Type.Block) return;
+           _cState != CharacterState.Type.IdleDamaged) return;
         _cState = CharacterState.Type.Dash;
-        print("cleared the passage");
         StartCoroutine(IDash(enemy, true));
     }
 
@@ -96,22 +94,85 @@ public class ActiveCharacter : MonoBehaviour
 
     IEnumerator IAttack(ActiveCharacter enemy)
     {
-        print(enemy._cHealthCurrent);
         enemy.GetAttacked(_cDamage);
-        print(enemy._cHealthCurrent);
         StartCoroutine(IDash(enemy, false));
         yield return 0;
     }
 
-
-    private void GetAttacked(float cDamage)
+    // ==================================================================================================== Get Attacked
+    public bool GetAttacked(float cDamage)
     {
-        _cHealthCurrent -= cDamage;
-        UpdateHealthSlider();
+        if (_cState == CharacterState.Type.Block) // blocked
+        {
+            return false;
+        }
+        else // not blocked duhu
+        {
+            GetDamaged(cDamage, true);
+            return true;
+        }
     }
-
+    
+    // ===================================================================================================== Take Damage
+    private void GetDamaged(float damage, bool ignoreArmor)
+    {
+        _cHealthCurrent -= damage;
+        HealthCheck();
+    }
+    
+    // ==================================================================================================== Health Stuff
+    private void HealthCheck()
+    {
+        UpdateHealthSlider();
+        if (_cHealthCurrent <= 0)
+        {
+            _cState = CharacterState.Type.Dies;
+            GetComponent<SpriteRenderer>().color = Color.black;
+        }
+        else _cState = CheckHealthStateForIdle();
+        
+    }
+    
     private void UpdateHealthSlider()
     {
         _healthSlider.value = _cHealthCurrent / _cHealthMax;
+    }
+
+    private CharacterState.Type CheckHealthStateForIdle()
+    {
+        float IdleDammagedTreshhold = 0.2f;
+        if (_cHealthCurrent / _cHealthMax <= IdleDammagedTreshhold)
+        {
+            return CharacterState.Type.IdleDamaged;
+        }
+        else return CharacterState.Type.Idle;
+    }
+    
+    // =========================================================================================================== Block
+    public void Block()
+    {
+        if(_cState != CharacterState.Type.Idle &&
+           _cState != CharacterState.Type.IdleDamaged) return;
+        
+        StartCoroutine(IBlock());
+    }
+
+    IEnumerator IBlock()
+    {
+        _cState = CharacterState.Type.Block;
+        // TODO: activate block anim 
+        SpriteRenderer rend = GetComponent<SpriteRenderer>();
+        rend.color = Color.green;
+        
+        yield return new WaitForSeconds(1f);
+
+        _cState = CheckHealthStateForIdle();
+        rend.color = Color.white;
+    }
+    
+    // =================================================================================================== Get Transform
+    public Transform GetTransform()
+    {
+        return transform;
     }
 }

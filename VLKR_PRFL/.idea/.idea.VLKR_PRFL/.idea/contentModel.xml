@@ -10,6 +10,7 @@
           <e p="BattleStuff" t="Include">
             <e p="BattleDataStorage.cs" t="Include" />
             <e p="BattleManager.cs" t="Include" />
+            <e p="InBattleSelectorMP.cs" t="Include" />
           </e>
           <e p="CameraShader" t="Include">
             <e p="ActionCamShader.shader" t="Include" />
@@ -27,6 +28,7 @@
             <e p="InputMagic.cs" t="Include" />
           </e>
           <e p="LifeHacks" t="Include">
+            <e p="FollowTarget.cs" t="Include" />
             <e p="GameObjectHolder.cs" t="Include" />
             <e p="GameSettup.cs" t="Include" />
           </e>

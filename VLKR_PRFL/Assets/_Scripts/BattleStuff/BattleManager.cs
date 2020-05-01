@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
     // ============================================================================================= 'Private' Variables
     [SerializeField] private InputMagic _inputMagic;
+    [SerializeField] private InBattleSelectorMP _selector;
     
     // =============================================================================================== Private Variables
     private ActiveCharacter[,] _charactersOnTheField = new ActiveCharacter[2,4];
     private int[] _playersToAttack = new int[2];
     private int[,] _actionToPlayer = new int[2,4];
+    private bool[] _triggerState = new bool[2];
 
     private bool _update;
     
@@ -27,11 +26,12 @@ public class BattleManager : MonoBehaviour
         _update = activate;
     }
 
-    // =========================================================================================================== Start
+    // ================================================================================================================= Start
     private void Start()
     {
         _inputMagic._ActionKeys += ActionKeyUpdate;
         _inputMagic._Dpad += DpadUpdate;
+        _inputMagic._BackTrigger += BackTriggersUpdate;
 
         SetActionToPlayer();
     }
@@ -48,25 +48,39 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // ========================================================================================================== Update
+    // ================================================================================================================= Update
     private void Update()
     {
         if(!_update) return;
-        print("hey i'm working ^^");
-        print(_charactersOnTheField[0,0]._cName);
-        print(_charactersOnTheField[1,3]._cName);
     }
     
-    // ========================================================================================================== Update
+    // ============================================================================================== Action keys Update
     private void ActionKeyUpdate(int player, int actionNumber, bool actionState)
     {
         if(actionState == false) return;
+        
         int other = player == 0 ? 1 : 0;
-        print(_actionToPlayer[player, actionNumber-1]);
-        _charactersOnTheField[player, _actionToPlayer[player, actionNumber-1]].Attack(_charactersOnTheField[other, _playersToAttack[player]]);
+
+        if (_triggerState[player] == true) // BLOCK
+        {
+            _charactersOnTheField[player, _actionToPlayer[player, actionNumber-1]].Block();
+        }
+        else // ATTACK
+        {
+            _charactersOnTheField[player, _actionToPlayer[player, actionNumber-1]]
+                .Attack(_charactersOnTheField[other, _playersToAttack[player]]);
+        }
+    }
+
+    // ============================================================================================ Back Triggers Update
+    private void BackTriggersUpdate(int player, ControllerEnums.Type leftOrRight, float value)
+    {
+        if (leftOrRight != ControllerEnums.Type.BackTriggerRight) return;
+
+        _triggerState[player] = value >= 0.5f ? true : false;
     }
     
-    // ========================================================================================================== Update
+    // ==================================================================================================== D-pad Update
     private void DpadUpdate(int player, ControllerEnums.Type type, float direction)
     {
         if(direction == 0) return;
@@ -79,6 +93,6 @@ public class BattleManager : MonoBehaviour
             if (player == 0){ _playersToAttack[player] = direction >= 0.9f ? 3 : 0;}
             if (player == 1){ _playersToAttack[player] = direction >= 0.9f ? 0 : 3;}
         }
-        print(_playersToAttack[player]);
+        _selector.ChangeSelectedPos(player, _charactersOnTheField[player == 0 ? 1 : 0, _playersToAttack[player]].GetTransform());
     }
 }
